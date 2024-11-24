@@ -165,56 +165,59 @@ router.post('/register', async (req, res) => {
 // @desc    Login user and return JWT token
 // @access  Public
 router.post('/login', async (req, res) => {
-    const { errors, isValid } = validateLoginInput(req.body);
-  
-    // Check validation
-    if (!isValid) {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      errors.password = 'Password incorrect';
       return res.status(400).json(errors);
     }
-  
-    try {
-      const { email, password } = req.body;
-  
-      // Find user by email
-      const user = await User.findOne({ email });
-      if (!user) {
-        errors.email = 'User not found';
-        return res.status(404).json(errors);
+
+    // Create JWT payload with role
+    const payload = {
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+      role: user.role, // Include role in payload
+    };
+
+    // Sign token
+    jwt.sign(
+      payload,
+      key,
+      { expiresIn: 3600 }, // Token expires in 1 hour
+      (err, token) => {
+        if (err) throw err;
+
+        // Include role in the response
+        res.json({
+          success: true,
+          token: 'Bearer ' + token,
+          role: user.role, // Add role to the response
+        });
       }
-  
-      // Check password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        errors.password = 'Password incorrect';
-        return res.status(400).json(errors);
-      }
-  
-      // Create JWT payload with role
-      const payload = {
-        id: user.id,
-        name: user.name,
-        avatar: user.avatar,
-        role: user.role, // Include role in payload
-      };
-  
-      // Sign token
-      jwt.sign(
-        payload,
-        key,
-        { expiresIn: 3600 }, // Token expires in 1 hour
-        (err, token) => {
-          if (err) throw err;
-          res.json({
-            success: true,
-            token: 'Bearer ' + token,
-          });
-        }
-      );
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Server error' });
-    }
-  });
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
   
 // @route   GET api/users/current

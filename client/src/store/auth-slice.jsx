@@ -1,34 +1,4 @@
-// import { createSlice } from "@reduxjs/toolkit";
 
-// const initialAuthState = {
-//   isAuthenticated: false,
-//   user: {
-//     role: '', // Possible values: 'user', 'admin', 'artist'
-//   },
-// };
-
-// const authSlice = createSlice({
-//   name: "authentication",
-//   initialState: initialAuthState,
-//   reducers: {
-//     login(state, action) {
-//       state.isAuthenticated = true;
-//       state.user = action.payload.user;
-//     },
-//     logout(state) {
-//       state.isAuthenticated = false;
-//       state.user = null;
-//     },
-//     register(state, action) {
-//       state.isAuthenticated = true; // Automatically log in after registration
-//       state.user = action.payload.user;
-//     },
-//   },
-// });
-
-// export const authActions = authSlice.actions;
-
-// export default authSlice;
 
 import { createSlice } from "@reduxjs/toolkit";
 

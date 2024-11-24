@@ -13,9 +13,9 @@ const Landing = () => {
                 Get NFT for your favourite piece of art
               </p>
               <hr />
-              <a href="register.html" className="btn btn-lg btn-info me-2">
+              <Link  className="btn btn-lg btn-info me-2" to="/register">
                 Sign Up
-              </a>
+              </Link>
               <Link className="btn btn-lg btn-light" to="/login">
                 Login
               </Link>
