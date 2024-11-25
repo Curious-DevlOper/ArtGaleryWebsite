@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addArtwork, editArtwork, deleteArtwork } from '../../store/painting-slice';
 
 const Artwork = () => {
-  const [artworks, setArtworks] = useState([]);
+  const artworks = useSelector((state) => state.painting.artworks);
+  const dispatch = useDispatch();
+
   const [artworkData, setArtworkData] = useState({
     title: '',
     description: '',
@@ -11,56 +15,41 @@ const Artwork = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentArtworkIndex, setCurrentArtworkIndex] = useState(null);
 
-  // Handle form changes
   const handleArtworkChange = (e) => {
     const { name, value } = e.target;
-    setArtworkData({
-      ...artworkData,
-      [name]: value,
-    });
+    setArtworkData({ ...artworkData, [name]: value });
   };
 
   const handleArtworkImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setArtworkData({
-        ...artworkData,
-        image: URL.createObjectURL(file),
-      });
+      setArtworkData({ ...artworkData, image: URL.createObjectURL(file) });
     }
   };
 
-  // Add a new artwork
   const handleAddArtwork = (e) => {
     e.preventDefault();
-    setArtworks((prevArtworks) => [...prevArtworks, artworkData]);
+    dispatch(addArtwork(artworkData));
     setArtworkData({ title: '', description: '', image: null });
     setIsAddingArtwork(false);
   };
 
-  // Delete an artwork
-  const handleDeleteArtwork = (index) => {
-    setArtworks((prevArtworks) => prevArtworks.filter((_, i) => i !== index));
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    dispatch(editArtwork({ index: currentArtworkIndex, updatedArtwork: artworkData }));
+    setIsEditing(false);
+    setArtworkData({ title: '', description: '', image: null });
+    setCurrentArtworkIndex(null);
   };
 
-  // Edit an artwork
+  const handleDeleteArtwork = (index) => {
+    dispatch(deleteArtwork(index));
+  };
+
   const handleEditArtwork = (index) => {
     setCurrentArtworkIndex(index);
     setArtworkData(artworks[index]);
     setIsEditing(true);
-  };
-
-  // Save edited artwork
-  const handleSaveEdit = (e) => {
-    e.preventDefault();
-    setArtworks((prevArtworks) =>
-      prevArtworks.map((artwork, i) =>
-        i === currentArtworkIndex ? artworkData : artwork
-      )
-    );
-    setIsEditing(false);
-    setArtworkData({ title: '', description: '', image: null });
-    setCurrentArtworkIndex(null);
   };
 
   return (
@@ -69,7 +58,7 @@ const Artwork = () => {
         Add Artwork
       </button>
 
-      {/* Add/Edit Artwork Form */}
+      {/* Add/Edit Form */}
       {(isAddingArtwork || isEditing) && (
         <div className="card shadow p-4 mb-4">
           <h3>{isEditing ? 'Edit Artwork' : 'Add New Artwork'}</h3>
@@ -128,7 +117,7 @@ const Artwork = () => {
         </div>
       )}
 
-      {/* Display Uploaded Artworks */}
+      {/* Artwork Display */}
       <div>
         <h3>Artworks</h3>
         {artworks.length > 0 ? (

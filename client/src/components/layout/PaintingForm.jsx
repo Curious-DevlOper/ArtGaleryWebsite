@@ -1,7 +1,7 @@
 // components/PaintingForm.js
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addPainting } from '../../store/painting-slice';
+import { addArtwork } from '../../store/painting-slice';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PaintingForm = () => {
@@ -33,7 +33,7 @@ const PaintingForm = () => {
     e.preventDefault();
 
     // Dispatch the form data to Redux store
-    dispatch(addPainting(formData));
+    dispatch(addArtwork(formData));
 
     // Reset form
     setFormData({
