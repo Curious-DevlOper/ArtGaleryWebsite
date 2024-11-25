@@ -43,6 +43,7 @@ const Login = () => {
     const user = {
       email,
       password,
+      name
     };
 
     try {
@@ -71,7 +72,7 @@ const Login = () => {
       // Dispatching the login action with the user and role
       dispatch(
         authActions.login({
-          user: { email, role },
+          user: { email, role, name },
         })
       );
 

@@ -1,20 +1,46 @@
-// features/paintingSlice.js
+// import { createSlice } from '@reduxjs/toolkit';
+
+// const initialState = {
+//   paintings: [],
+// };
+
+// const paintingSlice = createSlice({
+//   name: 'painting',
+//   initialState,
+//   reducers: {
+//     addPainting: (state, action) => {
+//       state.paintings.push(action.payload);
+//     },
+//   },
+// });
+
+// export const { addPainting } = paintingSlice.actions;
+
+// export default paintingSlice;
+// src/features/paintingSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  paintings: [],
+  artworks: [],
 };
 
 const paintingSlice = createSlice({
   name: 'painting',
   initialState,
   reducers: {
-    addPainting: (state, action) => {
-      state.paintings.push(action.payload);
+    addArtwork: (state, action) => {
+      state.artworks.push(action.payload);
+    },
+    editArtwork: (state, action) => {
+      const { index, updatedArtwork } = action.payload;
+      state.artworks[index] = updatedArtwork;
+    },
+    deleteArtwork: (state, action) => {
+      state.artworks.splice(action.payload, 1);
     },
   },
 });
 
-export const { addPainting } = paintingSlice.actions;
+export const { addArtwork, editArtwork, deleteArtwork } = paintingSlice.actions;
 
 export default paintingSlice;

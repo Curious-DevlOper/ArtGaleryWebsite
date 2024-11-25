@@ -109,7 +109,7 @@ const Navbar = () => {
               <>
                 {/* If authenticated, show user name and Logout */}
                 <li className="nav-item">
-                  <span className="navbar-text text-light">
+                  <span className="av-link text-light">
                     Welcome, {user?.name || 'User'}!
                   </span>
                 </li>
