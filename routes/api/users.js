@@ -210,7 +210,8 @@ router.post('/login', async (req, res) => {
           success: true,
           token: 'Bearer ' + token,
           role: user.role, // Add role to the response
-          name: user.name
+          name: user.name,
+          avatar: user.avatar
         });
       }
     );

@@ -21,6 +21,8 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.user = null;
       state.error = null; // Clear any existing errors
+      localStorage.removeItem('token'); // Clear JWT token
+
     },
     register(state, action) {
       state.isAuthenticated = true; // Automatically log in after successful registration
